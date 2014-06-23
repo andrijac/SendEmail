@@ -26,9 +26,6 @@ namespace SendEmail
 
 		public static void EncryptFile(string inputFilename, string outputFilename, string key)
 		{
-			// For additional security pin the key.
-			GCHandle gch = GCHandle.Alloc(key, GCHandleType.Pinned);
-
 			FileStream fsInput = new FileStream(inputFilename,
 				FileMode.Open,
 				FileAccess.Read);
@@ -46,23 +43,17 @@ namespace SendEmail
 								desencrypt,
 								CryptoStreamMode.Write);
 
-			byte[] bytearrayinput = new byte[fsInput.Length - 1];
+			byte[] bytearrayinput = new byte[fsInput.Length];
 			fsInput.Read(bytearrayinput, 0, bytearrayinput.Length);
 			cryptostream.Write(bytearrayinput, 0, bytearrayinput.Length);
 
 			cryptostream.Close();
 			fsEncrypted.Close();
-
-			CleanMemory(gch, key);
+			fsInput.Close();
 		}
 
-		public static void DecryptFile(string inputFilename,
-					string outputFilename,
-					string key)
+		public static void DecryptFile(string inputFilename, string outputFilename, string key)
 		{
-			// For additional security pin the key.
-			GCHandle gch = GCHandle.Alloc(key, GCHandleType.Pinned);
-
 			DESCryptoServiceProvider DES = new DESCryptoServiceProvider();
 			//A 64 bit key and IV is required for this provider.
 			//Set secret key For DES algorithm.
@@ -85,17 +76,10 @@ namespace SendEmail
 			StreamWriter fsDecrypted = new StreamWriter(outputFilename);
 			fsDecrypted.Write(new StreamReader(cryptostreamDecr).ReadToEnd());
 			fsDecrypted.Flush();
+
 			fsDecrypted.Close();
-
-			CleanMemory(gch, key);
-		}
-
-		private static void CleanMemory(GCHandle gch, string key)
-		{
-			// Remove the key from memory.
-			string addr = gch.AddrOfPinnedObject().ToString();
-			CryptoHelper.ZeroMemory(ref addr, key.Length * 2);
-			gch.Free();
+			fsread.Close();
+			cryptostreamDecr.Close();
 		}
 	}
 }

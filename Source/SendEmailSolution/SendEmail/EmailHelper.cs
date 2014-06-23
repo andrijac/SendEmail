@@ -7,7 +7,7 @@ namespace SendEmail
 {
 	internal class EmailHelper
 	{
-		public static void Send(string fromAddress, string fromPassword, string destinationAddress, string body, string subject)
+		public static void Send(string fromAddress, string fromPassword, string destinationAddress, string subject, string body)
 		{
 			MailAddress fromMailAddress = new MailAddress(fromAddress, "Source");
 			MailAddress toMailAddress = new MailAddress(destinationAddress, "Destination");
