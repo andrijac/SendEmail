@@ -89,25 +89,24 @@ namespace SendEmail
 			WL(string.Empty);
 			WL("SendEmail - send email from command line");
 			WL("-----------------------------------------");
+			WL("Usage:");
 			WL(string.Empty);
-			WL("Send email:");
+			WL("\tSend email:");
+			WL("\tSendEmail.exe \"security key\" \"to address\" \"email subject\" \"email body\"");
 			WL(string.Empty);
-
-			WL("SendEmail.exe \"security key\" \"to address\" \"email subject\" \"email body\"");
-			WL(string.Empty);
-
-			WL(string.Empty);
-			WL(string.Empty);
-			WL("Write credentials:");
-			WL(string.Empty);
-			WL("SendEmail.exe -w \"from adress\" \"from password\" \"security key\"");
+			WL("\tWrite credentials:");
+			WL("\tSendEmail.exe -w \"from adress\" \"from password\" \"security key\"");
 
 			WL(string.Empty);
 			WL(string.Empty);
 
 			WL("Examples:");
-			WL("Send email: SendEmail.exe from@domain.com fromPassword securitykey to@domain.com \"subject\" \"body\"");
-			WL("Write credentials: SendEmail.exe -w from@domain.com fromPassword securitykey");
+			WL(string.Empty);
+			WL("\tSend email: ");
+			WL("\tSendEmail.exe securitykey to@domain.com \"subject\" \"body\"");
+			WL(string.Empty);
+			WL("\tWrite credentials:");
+			WL("\tSendEmail.exe -w from@domain.com fromPassword securitykey");
 		}
 
 		private static void WL(string value)
