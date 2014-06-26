@@ -9,12 +9,20 @@ namespace SendEmail
 		private static string CredentialsFile = "sendemail.creds";
 		private static string CredentialsFileTemp = "temp.sendemail.creds";
 
+		private static string FullPathCredentialsFile = "sendemail.creds";
+		private static string FullPathCredentialsFileTemp = "temp.sendemail.creds";
+
 		/// <summary>
 		/// Used code from http://stackoverflow.com/a/32336
 		/// </summary>
 		/// <param name="args"></param>
 		private static void Main(string[] args)
 		{
+			string currentFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+			FullPathCredentialsFile = Path.Combine(currentFolder, CredentialsFile);
+			FullPathCredentialsFileTemp = Path.Combine(currentFolder, CredentialsFileTemp);
+
 			if (args.Length == 0)
 			{
 				Help();
@@ -44,6 +52,9 @@ namespace SendEmail
 			string subject = args[2];
 			string body = args[3];
 
+			subject = Macros.FormatMacros(subject);
+			body = Macros.FormatMacros(body);
+
 			EmailHelper.Send(configInfo.FromAddress, configInfo.FromPassword, toAddress, subject, body);
 		}
 
@@ -51,11 +62,11 @@ namespace SendEmail
 		{
 			string securityKey = args[0];
 
-			CryptoHelper.DecryptFile(CredentialsFile, CredentialsFileTemp, securityKey);
+			CryptoHelper.DecryptFile(FullPathCredentialsFile, FullPathCredentialsFileTemp, securityKey);
 
-			ConfigInfo configInfo = (ConfigInfo)SerializerHelper.Deserialize(typeof(ConfigInfo), CredentialsFileTemp);
+			ConfigInfo configInfo = (ConfigInfo)SerializerHelper.Deserialize(typeof(ConfigInfo), FullPathCredentialsFileTemp);
 
-			File.Delete(CredentialsFileTemp);
+			File.Delete(FullPathCredentialsFileTemp);
 
 			return configInfo;
 		}
@@ -77,11 +88,11 @@ namespace SendEmail
 				FromPassword = fromPassword
 			};
 
-			SerializerHelper.Serialize(typeof(ConfigInfo), configInfo, CredentialsFileTemp);
+			SerializerHelper.Serialize(typeof(ConfigInfo), configInfo, FullPathCredentialsFileTemp);
 
-			CryptoHelper.EncryptFile(CredentialsFileTemp, CredentialsFile, securityKey);
+			CryptoHelper.EncryptFile(FullPathCredentialsFileTemp, FullPathCredentialsFile, securityKey);
 
-			File.Delete(CredentialsFileTemp);
+			File.Delete(FullPathCredentialsFileTemp);
 		}
 
 		private static void Help()
