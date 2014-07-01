@@ -16,8 +16,8 @@ Write credentials:<br />
 
 **Macros**
 
-`{current_user}` - Current user
-`{now}` - Current time in format "yyyy-MM-dd HH:mm"
+- `{current_user}` - Current user
+- `{now}` - Current time in format "yyyy-MM-dd HH:mm"
 
 **Examples:**
 
