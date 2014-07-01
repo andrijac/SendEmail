@@ -14,6 +14,11 @@ Send email:<br />
 Write credentials:<br />
 `SendEmail.exe -w "from adress" "from password" "security key"`
 
+**Macros**
+
+`{current_user}` - Current user
+`{now}` - Current time in format "yyyy-MM-dd HH:mm"
+
 **Examples:**
 
 Send email: <br />
